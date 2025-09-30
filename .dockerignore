@@ -1,0 +1,6 @@
+.astro
+.github
+.vscode
+scripts
+node_modules
+dist

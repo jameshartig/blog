@@ -19,13 +19,15 @@ export const { getStaticPaths, GET } = OGImageRoute({
     description: themeConfig.site.title,
     logo: {
       path: 'public/og/og-logo.png',
-      size: [80, 80]
+      size: [72, 72]
     },
     bgGradient: [[255, 255, 255]],
+    /*
     bgImage: {
       path: 'public/og/og-bg.png',
       fit: 'fill'
     },
+    */
     padding: 64,
     font: {
       title: {

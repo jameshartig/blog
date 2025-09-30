@@ -14,16 +14,5 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Environment variables
-.env
-.env.production
-
 # macOS-specific files
 .DS_Store
-
-# IDE settings
-.idea/
-
-# Netlify build output
-.netlify/
-

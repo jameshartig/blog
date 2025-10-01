@@ -45,17 +45,43 @@ resource "google_cloudbuild_trigger" "github" {
 
   build {
     images = [
+      "${google_artifact_registry_repository.blog.registry_uri}/blog:$COMMIT_SHA",
       "${google_artifact_registry_repository.blog.registry_uri}/blog:latest",
     ]
 
     step {
+      name = "gcr.io/cloud-builders/docker"
       args = [
         "build",
+        "-t",
+        "${google_artifact_registry_repository.blog.registry_uri}/blog:$COMMIT_SHA",
         "-t",
         "${google_artifact_registry_repository.blog.registry_uri}/blog:latest",
         ".",
       ]
+    }
+
+    step {
       name = "gcr.io/cloud-builders/docker"
+      args = [
+        "push",
+        "${google_artifact_registry_repository.blog.registry_uri}/blog:$COMMIT_SHA",
+      ]
+    }
+
+    step {
+      name = "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
+      entrypoint = "gcloud"
+      args = [
+        "run",
+        "services",
+        "update",
+        "blog",
+        "--platform=managed",
+        "--image=${google_artifact_registry_repository.blog.registry_uri}/blog:$COMMIT_SHA",
+        "--region=global",
+        "--quiet",
+      ]
     }
 
     options {
@@ -83,6 +109,7 @@ resource "google_cloud_run_v2_service" "blog" {
   template {
     max_instance_request_concurrency = 1000
     service_account                  = google_service_account.blog.email
+    timeout                          = "10s"
 
     containers {
       image = "${google_artifact_registry_repository.blog.registry_uri}/blog:latest"
@@ -116,6 +143,16 @@ resource "google_cloud_run_v2_service_iam_binding" "blog" {
   members  = [
     "allUsers"
   ]
+}
+
+resource "google_cloud_run_v2_service_iam_member" "blog" {
+  for_each = toset(var.blog_run_regions)
+
+  project  = google_cloud_run_v2_service.blog.project
+  location = each.value
+  name     = google_cloud_run_v2_service.blog.name
+  role     = "roles/run.developer"
+  member   = "serviceAccount:${google_service_account.blog.email}"
 }
 
 resource "google_compute_region_network_endpoint_group" "blog" {

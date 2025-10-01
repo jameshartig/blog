@@ -20,14 +20,14 @@ variable "project_id" {
 variable "networks" {
   default = {
     "us-central1": "10.0.0.0/24",
-    "europe-west1": "10.0.16.0/24"
+    "europe-west1": "10.0.16.0/24",
   }
 }
 
 variable "blog_run_regions" {
   default = [
     "us-central1",
-    "europe-west1"
+    "europe-west1",
   ]
 }
 

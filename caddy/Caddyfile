@@ -1,10 +1,14 @@
 {
 	auto_https off
+	admin off
+	persist_config off
 }
 
-http://localhost:{$PORT}
+:{$PORT}
 
 root * /srv
+
+header * Cache-Control "public, max-age=3600"
 
 file_server
 

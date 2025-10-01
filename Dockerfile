@@ -6,7 +6,7 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-FROM nginx:alpine AS runtime
-COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
-COPY --from=build /app/dist /usr/share/nginx/html
-EXPOSE 8080
+FROM caddy:alpine
+COPY ./caddy/Caddyfile /etc/caddy/Caddyfile
+COPY --from=build /app/dist /srv
+ENV PORT=8080

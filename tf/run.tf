@@ -57,6 +57,10 @@ resource "google_cloudbuild_trigger" "github" {
       ]
       name = "gcr.io/cloud-builders/docker"
     }
+
+    options {
+      logging = "CLOUD_LOGGING_ONLY"
+    }
   }
 }
 
@@ -84,11 +88,11 @@ resource "google_cloud_run_v2_service" "blog" {
       image = "${google_artifact_registry_repository.blog.registry_uri}/blog:latest"
       resources {
         limits = {
-          cpu    = "2"
-          memory = "1024Mi"
+          cpu    = "1"
+          memory = "128Mi"
         }
         cpu_idle          = true
-        startup_cpu_boost = true
+        startup_cpu_boost = false
       }
       # TODO: liveness_probe
       # TODO: startup_probe
@@ -100,6 +104,18 @@ resource "google_cloud_run_v2_service" "blog" {
       }
     }
   }
+}
+
+resource "google_cloud_run_v2_service_iam_binding" "blog" {
+  for_each = toset(var.blog_run_regions)
+
+  project  = google_cloud_run_v2_service.blog.project
+  location = each.value
+  name     = google_cloud_run_v2_service.blog.name
+  role     = "roles/run.invoker"
+  members  = [
+    "allUsers"
+  ]
 }
 
 resource "google_compute_region_network_endpoint_group" "blog" {

@@ -16,3 +16,7 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+
+# Terraform generated files
+.terraform
+.terraform.*

@@ -31,7 +31,7 @@ export default defineConfig({
       wrap: false
     },
     remarkPlugins: [remarkMath, remarkDirective, remarkEmbeddedMedia, remarkReadingTime, remarkTOC],
-    rehypePlugins: [rehypeKatex, rehypeCleanup, rehypeImageProcessor, rehypeCopyCode]
+    rehypePlugins: [/*rehypeKatex,*/ rehypeCleanup, rehypeImageProcessor, rehypeCopyCode]
   },
   integrations: [
     playformInline({

@@ -1,4 +1,3 @@
-@import './fonts.css';
 @import './post.css';
 
 :root {
@@ -6,11 +5,9 @@
   --content-width: 25rem;
 
   /* Typography */
-  --sans:
-    Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
-    Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  --serif: Besley, Baskerville, Georgia, Cambria, 'Times New Roman', Times, serif;
-  --mono: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --sans: Verdana, sans-serif;
+  --serif: Georgia, 'Times New Roman', serif;
+  --mono: 'Courier New', monospace;
 
   --font-size-s: 0.8125rem;
   --font-size-m: 0.9375rem;
@@ -25,8 +22,8 @@
 
   /* Light Mode Colors (Default) */
   --bg: #ffffff;
-  --text-primary: rgba(0, 0, 0, 0.85);
-  --text-secondary: rgba(0, 0, 0, 0.4);
+  --text-primary: rgba(0, 0, 0, 0.9);
+  --text-secondary: rgba(0, 0, 0, 0.65);
   --text-tertiary: rgba(0, 0, 0, 0.24);
   --border: rgba(0, 0, 0, 0.1);
   --selection: rgba(0, 0, 0, 0.08);
@@ -50,8 +47,8 @@
 /* Light Mode (Explicit) */
 html.light {
   --bg: #ffffff;
-  --text-primary: rgba(0, 0, 0, 0.85);
-  --text-secondary: rgba(0, 0, 0, 0.4);
+  --text-primary: rgba(0, 0, 0, 0.95);
+  --text-secondary: rgba(0, 0, 0, 0.65);
   --text-tertiary: rgba(0, 0, 0, 0.24);
   --border: rgba(0, 0, 0, 0.1);
   --selection: rgba(0, 0, 0, 0.08);

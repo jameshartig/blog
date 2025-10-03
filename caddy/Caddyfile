@@ -8,7 +8,8 @@
 
 root * /srv
 
-header * Cache-Control "public, max-age=3600"
+header * CDN-Cache-Control "max-age=3600"
+header * Cache-Control "public, max-age=300"
 
 file_server
 

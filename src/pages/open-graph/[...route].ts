@@ -1,6 +1,5 @@
 import { getCollection } from 'astro:content'
 import { OGImageRoute } from 'astro-og-canvas'
-import { themeConfig } from '../../config'
 
 const collectionEntries = await getCollection('posts')
 
@@ -16,7 +15,7 @@ export const { getStaticPaths, GET } = OGImageRoute({
   pages,
   getImageOptions: (_path, page) => ({
     title: page.title,
-    description: themeConfig.site.title,
+    description: page.ogDescription || page.description,
     logo: {
       path: 'public/og/og-logo.png',
       size: [72, 72]
@@ -45,7 +44,7 @@ export const { getStaticPaths, GET } = OGImageRoute({
     },
     fonts: [
       'https://cdn.jsdelivr.net/npm/font-pingfang-sc-font-weight-improved@latest/PingFangSC-Medium.woff2',
-      'https://cdn.jsdelivr.net/npm/font-pingfang-sc-font-weight-improved@latest/PingFangSC-Semibold.woff2',
+      'https://cdn.jsdelivr.net/npm/font-pingfang-sc-font-weight-improved@latest/PingFangSC-Semibold.woff2'
     ]
   })
 })

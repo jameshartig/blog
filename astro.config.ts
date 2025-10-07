@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config'
 import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
 import playformInline from '@playform/inline'
+import playformCompress from '@playform/compress'
 import remarkMath from 'remark-math'
 import remarkDirective from 'remark-directive'
 import rehypeKatex from 'rehype-katex'
@@ -30,7 +31,13 @@ export default defineConfig({
       theme: 'css-variables',
       wrap: false
     },
-    remarkPlugins: [remarkMath, remarkDirective, remarkEmbeddedMedia, remarkReadingTime, remarkTOC],
+    remarkPlugins: [
+      /*remarkMath,*/
+      remarkDirective,
+      remarkEmbeddedMedia,
+      remarkReadingTime,
+      remarkTOC
+    ],
     rehypePlugins: [/*rehypeKatex,*/ rehypeCleanup, rehypeImageProcessor, rehypeCopyCode]
   },
   integrations: [
@@ -38,7 +45,10 @@ export default defineConfig({
       Exclude: [(file) => file.toLowerCase().includes('katex')]
     }),
     mdx(),
-    sitemap()
+    sitemap(),
+    playformCompress({
+      Image: false
+    })
   ],
   vite: {
     resolve: {

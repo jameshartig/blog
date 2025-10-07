@@ -6,7 +6,8 @@ export const themeConfig: ThemeConfig = {
     website: 'https://jameshartig.dev/', // Site domain
     title: 'James Hartig', // Site title
     author: 'James Hartig', // Author name
-    description: 'Personal blog about focused on technology', // Site description
+    description:
+      'The technical blog of James Hartig. Deep dives into real-world engineering challenges and technology explorations.', // Site description
     language: 'en-US' // Default language
   },
 

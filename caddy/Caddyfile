@@ -4,16 +4,22 @@
 	persist_config off
 }
 
-:{$PORT}
+:{$PORT} {
+	root * /srv
 
-root * /srv
+	header * CDN-Cache-Control "max-age=3600"
+	header * Cache-Control "public, max-age=300"
 
-header * CDN-Cache-Control "max-age=3600"
-header * Cache-Control "public, max-age=300"
+	handle_errors 404 {
+		rewrite * /{err.status_code}.html
+		file_server
+	}
 
-file_server
+	handle /code/* {
+		file_server * browse
+	}
 
-handle_errors 404 {
-	rewrite * /{err.status_code}.html
-	file_server
+	handle {
+		file_server
+	}
 }

@@ -28,6 +28,10 @@ http://jameshartig.dev {
 http:// {
 	reverse_proxy localhost:8080
 
+	handle /healthz {
+		respond "OK" 200
+	}
+
 	handle / {
 		redir https://jameshartig.dev
 	}

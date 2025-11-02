@@ -70,7 +70,7 @@ resource "google_cloudbuild_trigger" "github" {
     }
 
     step {
-      name = "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
+      name       = "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
       entrypoint = "gcloud"
       args = [
         "run",
@@ -95,7 +95,8 @@ resource "google_cloud_run_v2_service" "blog" {
   name     = "blog"
   location = "global"
   ingress  = "INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER"
-  #default_uri_disabled = true
+
+  default_uri_disabled = true
 
   scaling {
     min_instance_count = 0
@@ -113,6 +114,7 @@ resource "google_cloud_run_v2_service" "blog" {
 
     containers {
       image = "${google_artifact_registry_repository.blog.registry_uri}/blog:latest"
+
       resources {
         limits = {
           cpu    = "1"
@@ -121,8 +123,22 @@ resource "google_cloud_run_v2_service" "blog" {
         cpu_idle          = true
         startup_cpu_boost = false
       }
-      # TODO: liveness_probe
-      # TODO: startup_probe
+
+      liveness_probe {
+        timeout_seconds = 1
+        period_seconds  = 15
+        http_get {
+          path = "/healthz"
+        }
+      }
+
+      startup_probe {
+        timeout_seconds = 1
+        period_seconds  = 1
+        http_get {
+          path = "/healthz"
+        }
+      }
     }
 
     vpc_access {
@@ -149,7 +165,7 @@ resource "google_cloud_run_v2_service_iam_binding" "blog" {
   location = each.value
   name     = google_cloud_run_v2_service.blog.name
   role     = "roles/run.invoker"
-  members  = [
+  members = [
     "allUsers"
   ]
 }

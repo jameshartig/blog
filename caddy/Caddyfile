@@ -1,4 +1,5 @@
 {
+	http_port {$PORT}
 	auto_https off
 	admin off
 	persist_config off
@@ -24,7 +25,7 @@ http://jameshartig.dev {
 	}
 }
 
-:{$PORT} {
+http:// {
 	reverse_proxy localhost:8080
 
 	handle / {

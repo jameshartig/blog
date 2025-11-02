@@ -4,7 +4,7 @@
 	persist_config off
 }
 
-:{$PORT} {
+http://jameshartig.dev {
 	root * /srv
 
 	header * CDN-Cache-Control "max-age=3600"
@@ -21,5 +21,17 @@
 
 	handle {
 		file_server
+	}
+}
+
+:{$PORT} {
+	reverse_proxy localhost:8080
+
+	handle / {
+		redir https://jameshartig.dev
+	}
+
+	handle {
+		respond "not found" 404
 	}
 }

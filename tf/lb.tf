@@ -2,13 +2,13 @@ resource "google_compute_backend_service" "run" {
   project = var.project_id
   name    = "blog"
 
-  load_balancing_scheme           = "EXTERNAL_MANAGED"
-  protocol                        = "HTTP"
-  enable_cdn                      = false
-  compression_mode                = "DISABLED"
-  session_affinity                = "CLIENT_IP"
-  edge_security_policy            = null
-  security_policy                 = null
+  load_balancing_scheme = "EXTERNAL_MANAGED"
+  protocol              = "HTTP"
+  enable_cdn            = false
+  compression_mode      = "DISABLED"
+  session_affinity      = "CLIENT_IP"
+  edge_security_policy  = null
+  security_policy       = null
 
   dynamic "backend" {
     for_each = google_compute_region_network_endpoint_group.blog
@@ -88,9 +88,9 @@ resource "google_certificate_manager_dns_authorization" "jameshartig_dev" {
 }
 
 resource "google_certificate_manager_certificate" "jameshartig_dev" {
-  project     = var.project_id
-  name        = "jameshartig-dev"
-  scope       = "DEFAULT"
+  project = var.project_id
+  name    = "jameshartig-dev"
+  scope   = "DEFAULT"
 
   managed {
     domains = [
@@ -109,6 +109,40 @@ resource "google_certificate_manager_certificate" "jameshartig_dev" {
   }
 }
 
+resource "google_certificate_manager_dns_authorization" "jameshartig_com" {
+  project = var.project_id
+  name    = "jameshartig-com"
+  domain  = "jameshartig.com"
+
+  depends_on = [module.enabled_google_apis]
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
+resource "google_certificate_manager_certificate" "jameshartig_com" {
+  project = var.project_id
+  name    = "jameshartig-com"
+  scope   = "DEFAULT"
+
+  managed {
+    domains = [
+      google_certificate_manager_dns_authorization.jameshartig_com.domain
+    ]
+    dns_authorizations = [
+      google_certificate_manager_dns_authorization.jameshartig_com.id
+    ]
+  }
+
+  lifecycle {
+    ignore_changes = [
+      labels,
+      managed[0].authorization_attempt_info[0].state
+    ]
+  }
+}
+
 # TODO: need to use a certificate map with external LB until https://github.com/hashicorp/terraform-provider-google/issues/17176
 resource "google_certificate_manager_certificate_map" "blog" {
   project = var.project_id
@@ -116,13 +150,23 @@ resource "google_certificate_manager_certificate_map" "blog" {
 }
 
 resource "google_certificate_manager_certificate_map_entry" "jameshartig_dev" {
-  project      = var.project_id
-  name         = "jameshartig-dev"
-  map          = google_certificate_manager_certificate_map.blog.name
+  project = var.project_id
+  name    = "jameshartig-dev"
+  map     = google_certificate_manager_certificate_map.blog.name
   certificates = [
     google_certificate_manager_certificate.jameshartig_dev.id
   ]
-  matcher = "PRIMARY"
+  hostname = "jameshartig.dev"
+}
+
+resource "google_certificate_manager_certificate_map_entry" "jameshartig_com" {
+  project = var.project_id
+  name    = "jameshartig-com"
+  map     = google_certificate_manager_certificate_map.blog.name
+  certificates = [
+    google_certificate_manager_certificate.jameshartig_com.id
+  ]
+  hostname = "jameshartig.com"
 }
 
 resource "google_compute_ssl_policy" "tls_1_2_modern" {

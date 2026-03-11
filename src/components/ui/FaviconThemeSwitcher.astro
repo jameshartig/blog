@@ -96,6 +96,13 @@
     }
   }
 
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init)
+  } else {
+    init()
+  }
+
   // Use only astro:page-load as it fires on initial load and navigation
   document.addEventListener('astro:page-load', init)
 </script>

@@ -134,6 +134,12 @@ import { themeConfig } from '@/config'
     })
   }
 
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCopyCode)
+  } else {
+    initCopyCode()
+  }
+
   // Use only astro:page-load as it fires on initial load and navigation
   document.addEventListener('astro:page-load', initCopyCode)
 </script>

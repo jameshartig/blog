@@ -16,6 +16,12 @@
     })
   }
 
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', removeImgPlaceholder)
+  } else {
+    removeImgPlaceholder()
+  }
+
   // Use only astro:page-load as it fires on initial load and navigation
   document.addEventListener('astro:page-load', removeImgPlaceholder)
 </script>

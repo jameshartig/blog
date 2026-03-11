@@ -65,7 +65,6 @@ async function fixRelativeImagePaths(htmlContent: string, baseUrl: string, postP
             // Production environment: use getImage optimization
             const processedImage = await getImage({
               src: metadata,
-              format: 'webp',
               width: 800
             })
 

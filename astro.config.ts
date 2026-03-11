@@ -1,4 +1,4 @@
-import { defineConfig } from 'astro/config'
+import { defineConfig, passthroughImageService } from 'astro/config'
 import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
 import playformInline from '@playform/inline'
@@ -22,10 +22,13 @@ export default defineConfig({
   output: 'static',
   site: themeConfig.site.website,
   image: {
+    /*
     service: {
       entrypoint: 'astro/assets/services/sharp',
       config: imageConfig
     }
+    */
+   service: passthroughImageService()
   },
   markdown: {
     shikiConfig: {

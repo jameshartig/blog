@@ -1,5 +1,7 @@
-import { getCollection } from 'astro:content'
+import { getCollection, type CollectionEntry } from 'astro:content'
 import { OGImageRoute } from 'astro-og-canvas'
+
+export const prerender = true
 
 const collectionEntries = await getCollection('posts')
 
@@ -10,10 +12,10 @@ const pages = Object.fromEntries(
   collectionEntries.map((entry: CollectionEntry<'posts'>) => [entry.id.replace(/\.(md|mdx)$/, ''), entry.data])
 )
 
-export const { getStaticPaths, GET } = OGImageRoute({
+export const { getStaticPaths, GET } = await OGImageRoute({
   param: 'route',
   pages,
-  getImageOptions: (_path, page) => ({
+  getImageOptions: (_path: string, page: CollectionEntry<'posts'>['data']) => ({
     title: page.title,
     description: page.ogDescription || page.description,
     logo: {
@@ -32,19 +34,13 @@ export const { getStaticPaths, GET } = OGImageRoute({
       title: {
         color: [28, 28, 28],
         size: 68,
-        weight: 'SemiBold',
-        families: ['PingFang SC']
+        weight: 'Bold'
       },
       description: {
-        color: [180, 180, 180],
+        color: [90, 90, 90],
         size: 40,
-        weight: 'Medium',
-        families: ['PingFang SC']
+        weight: 'Normal'
       }
-    },
-    fonts: [
-      'https://cdn.jsdelivr.net/npm/font-pingfang-sc-font-weight-improved@latest/PingFangSC-Medium.woff2',
-      'https://cdn.jsdelivr.net/npm/font-pingfang-sc-font-weight-improved@latest/PingFangSC-Semibold.woff2'
-    ]
+    }
   })
 })

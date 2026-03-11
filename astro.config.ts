@@ -3,9 +3,7 @@ import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
 import playformInline from '@playform/inline'
 import playformCompress from '@playform/compress'
-import remarkMath from 'remark-math'
 import remarkDirective from 'remark-directive'
-import rehypeKatex from 'rehype-katex'
 import remarkEmbeddedMedia from './src/plugins/remark-embedded-media.mjs'
 import remarkReadingTime from './src/plugins/remark-reading-time.mjs'
 import rehypeCleanup from './src/plugins/rehype-cleanup.mjs'
@@ -15,6 +13,9 @@ import remarkTOC from './src/plugins/remark-toc.mjs'
 import { themeConfig } from './src/config'
 import { imageConfig } from './src/utils/image-config'
 import path from 'path'
+
+function remarkMath(){}
+function rehypeKatex(){}
 
 export default defineConfig({
   //adapter: netlify(), // Set adapter for deployment, or set `linkCard` to `false` in `src/config.ts`
@@ -32,13 +33,13 @@ export default defineConfig({
       wrap: false
     },
     remarkPlugins: [
-      /*remarkMath,*/
+      remarkMath,
       remarkDirective,
       remarkEmbeddedMedia,
       remarkReadingTime,
       remarkTOC
     ],
-    rehypePlugins: [/*rehypeKatex,*/ rehypeCleanup, rehypeImageProcessor, rehypeCopyCode]
+    rehypePlugins: [rehypeKatex, rehypeCleanup, rehypeImageProcessor, rehypeCopyCode]
   },
   integrations: [
     playformInline({

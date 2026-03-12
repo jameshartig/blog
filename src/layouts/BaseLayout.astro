@@ -41,6 +41,20 @@ const finalWidth = shouldUseCustomWidth ? `${widthValue}rem` : '25rem'
         </div>
       )
     }
+
+    { !fadeAnimation && (
+    <script is:inline>
+        const dispatchPageLoad = () => {
+          document.dispatchEvent(new Event('astro:page-load'))
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', dispatchPageLoad, { once: true })
+        } else {
+          queueMicrotask(dispatchPageLoad)
+        }
+    </script>
+    )}
   </body>
 </html>
 

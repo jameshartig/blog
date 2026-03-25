@@ -10,6 +10,7 @@ export interface PostLayoutProps {
   title: string
   pubDate: Date
   image?: string
+  description?: string
   readingTime?: ReadingTime
   toc?: TOCItem[]
 }
